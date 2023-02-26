@@ -94,7 +94,7 @@ exports.userLogIn = async (req, res) => {
     // Set the token as a cookie and send response
     res
       .status(200)
-      .cookie("signIn", token, {
+      .cookie("logIn", token, {
         httpOnly: true,
         expires: new Date(Date.now() + 2 * 24 * 3600000),
       })
@@ -116,8 +116,8 @@ exports.userLogIn = async (req, res) => {
 // log out a user by clearing the login cookie
 exports.userLogOut = (_req, res) => {
   try {
-    res.clearCookie("signIn");
-    res.status(200).json({ success: true, message: "Signout successfully" });
+    res.clearCookie("logIn");
+    res.status(200).json({ success: true, message: "LogOut successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -125,4 +125,21 @@ exports.userLogOut = (_req, res) => {
       message: "Error in response route",
     });
   }
+};
+
+// checks if a user is logged in or not by checking for the userId in the request body
+exports.isLoggedIn = async (req, res) => {
+  const userId = req.body.userId;
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "User is not logged in" });
+  }
+  // Find the user with the given userId and return the user object without the email, password, todos, and token fields
+  const user = await User.findById(
+    { _id: userId },
+    "-email -password -todos -token"
+  );
+
+  res.status(200).json({ success: true, message: "User is logged in", user });
 };
