@@ -143,3 +143,25 @@ exports.isLoggedIn = async (req, res) => {
 
   res.status(200).json({ success: true, message: "User is logged in", user });
 };
+
+// get all the users from the database along with their todos
+exports.getUsers = async (_req, res) => {
+  try {
+    // Get all the users from the DB along with their todos
+    const users = await User.find().populate("todos");
+    // console.log(users);
+    if (!users) {
+      // If no users found
+      res.status(400).send("Unable to find users");
+    }
+
+    // Send the list of users
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error.message);
+  }
+};
