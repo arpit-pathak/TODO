@@ -23,5 +23,6 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api", userRoutes);
 app.use("/todo", todoRoutes);
+app.use("/todo/tasks", tasksRoutes);
 
 module.exports = app;
