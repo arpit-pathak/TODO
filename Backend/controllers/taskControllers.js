@@ -57,3 +57,58 @@ exports.getTodoById = async (req, res) => {
       .json({ success: false, message: "Error in response route" });
   }
 };
+
+exports.deleteTask = async (req, res) => {
+  try {
+    const { todoId, taskId } = req.params;
+
+    const todo = await Todo.updateOne(
+      {
+        _id: todoId,
+      },
+      { $pull: { tasks: { _id: taskId } } }
+    );
+    console.log(todo);
+
+    res.status(200).json({
+      success: true,
+      message: "tasks successfully deleted",
+      todo,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ success: false, message: "Error in response route" });
+  }
+};
+
+exports.updateTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { task, isCompleted, isImportant } = req.body;
+
+    const todo = await Todo.findOneAndUpdate(
+      { tasks: { $elemMatch: { _id: taskId } } },
+      {
+        $set: {
+          "tasks.$.task": task,
+          "tasks.$.isImportant": isImportant,
+          "tasks.$.isCompleted": isCompleted,
+          "tasks.$.taskUpdatedAt": Date.now(),
+        },
+      }
+    );
+    console.log(todo);
+
+    res.status(200).json({
+      success: true,
+      message: "tasks updated successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ success: false, message: "Error in response route" });
+  }
+};
