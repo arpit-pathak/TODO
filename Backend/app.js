@@ -6,7 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 const userRoutes = require("./routes/userRoutes");
-
+const todoRoutes = require("./routes/todoRoutes");
 // Express middlewares
 app.use(cookieParser());
 app.use(express.json());
@@ -22,5 +22,6 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api", userRoutes);
+app.use("/todo", todoRoutes);
 
 module.exports = app;
