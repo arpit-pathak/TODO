@@ -112,3 +112,37 @@ exports.updateTask = async (req, res) => {
       .json({ success: false, message: "Error in response route" });
   }
 };
+
+exports.searchTasks = async (req, res) => {
+  try {
+    let search = req.body.search;
+    search = search.trim();
+    console.log(search);
+
+    const todo = await Todo.find({
+      _id: req.params.todoId,
+    });
+    console.log(todo[0]);
+
+    if (!todo) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Todo not found" });
+    }
+
+    const filteredTasks = todo[0].tasks.filter((e) =>
+      e.task.toLowerCase().includes(search)
+    );
+
+    let newTodo = todo[0];
+    newTodo.tasks = filteredTasks;
+    console.log(newTodo);
+
+    res.status(200).json({ success: true, todo: newTodo });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error in response route" });
+  }
+};
