@@ -94,7 +94,7 @@ exports.userLogIn = async (req, res) => {
     // Set the token as a cookie and send response
     res
       .status(200)
-      .cookie("logIn", token, {
+      .cookie("token", token, {
         httpOnly: true,
         expires: new Date(Date.now() + 2 * 24 * 3600000),
       })
@@ -113,10 +113,10 @@ exports.userLogIn = async (req, res) => {
   }
 };
 
-// log out a user by clearing the login cookie
+// log out a user by clearing the token in cookie
 exports.userLogOut = (_req, res) => {
   try {
-    res.clearCookie("logIn");
+    res.clearCookie("token");
     res.status(200).json({ success: true, message: "LogOut successfully" });
   } catch (error) {
     console.log(error);

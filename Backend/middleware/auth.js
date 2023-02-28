@@ -8,30 +8,27 @@ const userAuth = async (req, res, next) => {
     ? req.header("Authorization").replace("Bearer ", "")
     : "";
 
-  console.log("cookie:", req.cookies.logIn);
-  const token = req.cookies.logIn || bearerToken;
+  console.log("cookie:", req.cookies.token);
+  const token = req.cookies.token || bearerToken;
 
   // if token not found, return error
   if (!token) {
-    res.status(401).json({ success: false, message: "Token not found" });
+    res.status(400).json({ success: false, message: "Token not found" });
     return;
   }
 
   try {
     // verify token and set user ID in request body
+
     const decode = jwt.verify(token, TOKEN_SECRET);
     req.body.userId = decode.id;
   } catch (error) {
     console.log(error);
     // if error in verifying token, return error
-    res.status(400).json({
-      success: false,
-      message: "Invalid or expired session: please log in again",
-    });
+    res.status(400).json({ success: false, message: "Error in middleware" });
     return;
   }
 
-  // call next middleware function
   return next();
 };
 

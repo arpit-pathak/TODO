@@ -1,12 +1,14 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const cors = require("cors");
 const connectToDB = require("./config/database");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const userRoutes = require("./routes/userRoutes");
 
 // Express middlewares
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
