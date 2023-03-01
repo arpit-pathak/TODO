@@ -17,6 +17,7 @@ const tasksSchema = mongoose.Schema({
 const todoSchema = mongoose.Schema(
   {
     title: {
+      type: String,
       required: [true, "Title is required"],
       maxLength: [30, "Maximum length of title is 30 charecters"],
     },

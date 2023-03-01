@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 
 const userRoutes = require("./routes/userRoutes");
 const todoRoutes = require("./routes/todoRoutes");
+const tasksRoutes = require("./routes/taskRoutes");
 // Express middlewares
 app.use(cookieParser());
 app.use(express.json());
